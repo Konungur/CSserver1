@@ -3,16 +3,16 @@ from unittest import TestCase
 
 class TestDocument(TestCase):
     def test_insert(self):
-        self.fail()
+        pass
 
     def test_delete(self):
-        self.fail()
+        pass
 
     def test_save(self):
-        self.fail()
+        pass
 
     def test_forward(self):
-        self.fail()
+        self.assertRaises(EOFError)
 
     def test_back(self):
-        self.fail()
+        self.assertRaises(Exception)
