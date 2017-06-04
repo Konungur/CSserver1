@@ -49,7 +49,6 @@ class ArrayExpanded(object):
         fillValue is placed at each position."""
         self._items = list()
         self._logicalSize = 0
-        # Track the capacity and fill value for adjustments later
         self._capacity = capacity
         self._fillValue = fillValue
         for count in range(capacity):
@@ -70,15 +69,15 @@ class ArrayExpanded(object):
     def __getitem__(self, index):
         """Subscript operator for access at index.
         Precondition: 0 <= index < size()"""
-        #if index < 0 or index >= self.size():
-        #    raise IndexError("Array index out of bounds")
+        if index < 0 or index >= self.size():
+            raise IndexError("Array index out of bounds")
         return self._items[index]
 
     def __setitem__(self, index, newItem):
         """Subscript operator for replacement at index.
         Precondition: 0 <= index < size()"""
-        #if index < 0 or index >= self.size():
-        #    raise IndexError("Array index out of bounds")
+        if index < 0 or index >= self.size():
+            raise IndexError("Array index out of bounds")
         self._items[index] = newItem
 
     def size(self):
@@ -87,15 +86,11 @@ class ArrayExpanded(object):
 
     def grow(self):
         """Increases the physical size of the array if necessary."""
-        # Double the physical size if no more room for items
-        # and add the fillValue to the new cells in the underlying list
         for count in range(len(self)):
             self._items.append(self._fillValue)
 
     def shrink(self):
         """Decreases the physical size of the array if necessary."""
-        # Shrink the size by half but not below the default capacity
-        # and remove those garbage cells from the underlying list
         newSize = max(self._capacity, len(self) // 2)
         for count in range(len(self) - newSize):
             self._items.pop()
@@ -108,11 +103,8 @@ class ArrayExpanded(object):
             self._items[self.size()] = newItem
         else:
             index = max(index, 0)
-            # Shift items down by one position
             for i in range(self.size(), index, -1):
                 self._items[i] = self._items[i - 1]
-
-            # Add new item and increment logical size
             self._items[index] = newItem
         self._logicalSize += 1
 
@@ -122,10 +114,8 @@ class ArrayExpanded(object):
         if index < 0 or index >= self.size():
             raise IndexError("Array index out of bounds")
         itemToReturn = self._items[index]
-        # Shift items up by one position
         for i in range(index, self.size() - 1):
             self._items[i] = self._items[i + 1]
-        # Reset empty slot to fill value
         self._items[self.size() - 1] = self._fillValue
         self._logicalSize -= 1
         if self.size() <= len(self) // 4 and len(self) > self._capacity:

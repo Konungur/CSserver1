@@ -3,19 +3,24 @@ File: arraystack.py
 Project 7.1
 """
 
-from arrays import Array, ArrayExpanded
+from arrays import Array
 from abstractstack import AbstractStack
 
 class ArrayStack(AbstractStack):
     """An array-based stack implementation."""
+
+    # Class variable
     DEFAULT_CAPACITY = 100
-    
+
+    # Constructor
     def __init__(self, sourceCollection = None):
         """Sets the initial state of self, which includes the
         contents of sourceCollection, if it's present."""
+        #self._items = Array(ArrayStack.DEFAULT_CAPACITY)
         self._items = ArrayExpanded(ArrayStack.DEFAULT_CAPACITY)
         AbstractStack.__init__(self, sourceCollection)
-        
+
+    # Accessor methods
     def __iter__(self):
         """Supports iteration over a view of self.
         Visits items from bottom to top of stack."""
@@ -32,6 +37,7 @@ class ArrayStack(AbstractStack):
             raise KeyError("The stack is empty")
         return self._items[len(self) - 1]
 
+    # Mutator methods
     def clear(self):
         """Makes self become empty."""
         self._size = 0
@@ -39,10 +45,15 @@ class ArrayStack(AbstractStack):
 
     def push(self, item):
         """Inserts item at top of the stack."""
+        # Resize array here if necessary
         print(type(self), self._size)
         if len(self) == len(self._items):
             print("grow")
             self._items.grow()
+            #temp = Array(2 * len(self))
+            #for i in range(len(self)):
+            #    temp[i] = self._items[i]
+            #self._items = temp
         self._items[len(self)] = item
         self._size += 1
 
@@ -55,8 +66,13 @@ class ArrayStack(AbstractStack):
             raise KeyError("The stack is empty")
         oldItem = self._items[len(self) - 1]
         self._size -= 1
+        # Resize the array here if necessary
         if len(self) <= len(self._items) // 4 and \
            len(self._items) >= 2 * ArrayStack.DEFAULT_CAPACITY:
             print("shrink")
+            #temp = Array(len(self._items) // 2)
+            #for i in range(len(self)):
+            #    temp [i] = self._items[i]
+            #self._items = temp
             self._items.shrink()
         return oldItem
